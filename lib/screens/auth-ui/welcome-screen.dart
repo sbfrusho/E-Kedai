@@ -1,183 +1,224 @@
-// ignore_for_file: prefer_final_fields, unused_field
-
-import 'dart:math';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:local_auth/local_auth.dart';
-import 'package:shopping_app/const/app-colors.dart';
-import 'package:shopping_app/controller/sign-in-controller.dart';
-import 'package:shopping_app/screens/auth-ui/login-screen.dart';
-import 'package:shopping_app/screens/auth-ui/register-screen.dart';
+import 'package:get/get.dart';
+import 'package:shopping_app/screens/auth-ui/forgot-password-screen.dart';
 import 'package:shopping_app/screens/user/home-screen.dart';
+import '../../controller/get-user-data-controller.dart';
+import '../../controller/sign-in-controller.dart';
+import 'register-screen.dart';
 
-class WelcomeScreen extends StatefulWidget {
-  WelcomeScreen({super.key});
-
-  @override
-  State<WelcomeScreen> createState() => _WelcomeScreenState();
-}
-
-class _WelcomeScreenState extends State<WelcomeScreen> {
-  final SignInController signInController = SignInController();
-  late final LocalAuthentication localAuth;
-  bool _supportState = false;
-
-  @override
-  void initState() {
-    super.initState();
-    localAuth = LocalAuthentication();
-    localAuth.isDeviceSupported().then((bool isSupported) => setState(() {
-          _supportState = isSupported;
-        }));
-  }
-
+class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // add a media query to get the screen size
+    final mediaQuery = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
-        body: Container(
-          color: const Color.fromARGB(255, 248, 246, 242),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  child: Image(
-                    image: const AssetImage("assets/utm.jpeg"),
-                    height: 80.h,
-                    width: 100.w,
+        appBar: AppBar(
+          backgroundColor: Colors.blue,
+          //Add a back button to left of the app bar
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ),
+        body: SingleChildScrollView(
+          child: Container(
+            height: mediaQuery.height,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.blue,
+                  Colors.yellow,
+                ],
+              ),
+            ),
+            child: SafeArea(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Image(
+                    image: AssetImage(
+                      "assets/images/img_shopping_cart_1.png",
+                    ),
+                    width: 200,
+                    height: 200,
                   ),
-                ), // Replace with your image path
-                const SizedBox(height: 20),
-                Container(
-                  child: Image(
-                    image: const AssetImage("assets/image 1.png"),
-                    height: 150.h,
-                    width: 2000.w,
+                  const Text(
+                    'Welcome TO E-KEDAI',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
-                ), // Replace with your image path
-                const SizedBox(height: 20),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 100.w,
-                      height: 50.h,
-                      decoration: BoxDecoration(
-                        color: AppColor().colorRed,
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const LoginScreen()),
-                              );
-                            },
-                            child: Text(
-                              "Login",
-                              style: TextStyle(
-                                  fontSize: 12.sp,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                      ),
+                  SizedBox(height: 20),
+                  const Text(
+                    'A new shopping experience.',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
                     ),
-                    const SizedBox(height: 20),
-                    Container(
-                      width: 100.w,
-                      height: 50.h,
-                      decoration: BoxDecoration(
-                        color: AppColor().colorRed,
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const RegisterScreen()),
-                              );
-                            },
-                            child: Text(
-                              "Register",
-                              style: TextStyle(
-                                  fontSize: 12.sp,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                      ),
+                  ),
+                  SizedBox(height: 20),
+                  const Text(
+                    'Login to continue',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
                     ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColor().colorRed,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                            ),
-                            onPressed: authenticate,
-                            child: const Text("Use Biometric Authentication")),
+                  ),
+                  SizedBox(height: 20),
+                  SizedBox(height: 20),
+                  LoginForm(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Don\'t have an account?'),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => RegisterScreen()));
+                        },
+                        child: Text(
+                          "Register",
+                          style: TextStyle(color: Colors.red),
+                        ),
                       ),
-                    )
-                  ],
-                ),
-              ],
+                      Text("here"),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       ),
     );
   }
+}
 
-  Future<void> authenticate() async{
-    try{
-      bool isAuthenticated = await localAuth.authenticate(
-        localizedReason: "Authenticate to login",
-        options: const AuthenticationOptions(
-          stickyAuth: true,
-          biometricOnly: true,
-        ),
-      );
-      if(isAuthenticated){
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const HomeScreen(),
+class LoginForm extends StatelessWidget {
+  final SignInController signInController = Get.put(SignInController());
+  final GetUserDataController getUserDataController =
+      Get.put(GetUserDataController());
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(10),
+      child: Column(
+        children: [
+          TextFormField(
+            controller: emailController,
+            decoration: InputDecoration(
+              labelText: 'Email',
+              filled: true,
+            ),
           ),
-        );
-      }
-    }on PlatformException catch(e){
+          SizedBox(height: 10),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Obx(
+              () => TextFormField(
+                controller: passwordController,
+                obscureText: signInController.isPasswordVisible.value,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  filled: true,
+                  fillColor: Colors.white,
+                  suffixIcon: GestureDetector(
+                    onTap: () {
+                      signInController.isPasswordVisible.toggle();
+                    },
+                    child: signInController.isPasswordVisible.value
+                        ? Icon(Icons.visibility_off)
+                        : Icon(Icons.visibility),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => ForgotPasswordScreen()));
+                },
+                child: Text(
+                  "Forgot Password",
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () async {
+              String email = emailController.text.trim();
+              String password = passwordController.text.trim();
 
-    }
+              if (email.isEmpty || password.isEmpty) {
+                showToast(context, "All fields are required");
+              } else {
+
+                UserCredential? userCredential =
+                    await signInController.signInMethod(email, password);
+
+                String? whoLoggedIn = "";
+
+                var userData = getUserDataController.getUserData(userCredential!.user!.uid);
+
+                // print("Hello Wrold ------ >>>>>>>>");
+                // print(userData);
+                // print("End ---------- ......>>>>>>>>>>>>");
+
+                // ignore: unnecessary_null_comparison
+                if (userCredential != null) {
+                  if (userCredential.user!.emailVerified) {
+
+                    showToast(context, "Login $whoLoggedIn Successful");
+
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => HomeScreen()));
+
+                        
+                    return; // Return here to prevent showing unnecessary toasts or snackbar
+                  } else {
+                    showToast(context, "Please verify your email before login");
+                  }
+                } else {
+                  showToast(context, "Login failed. Please try again.");
+                }
+              }
+            },
+            child: Text('Login'),
+          ),
+        ],
+      ),
+    );
   }
+}
 
-  Future<void> getBiometricTypes() async {
-    List<BiometricType> availableBiometrics =
-        await localAuth.getAvailableBiometrics();
-
-      print("available : $availableBiometrics");
-      if(!mounted) return;
-  }
+//create a toast message for the login
+void showToast(BuildContext context, String message) {
+  final scaffold = ScaffoldMessenger.of(context);
+  scaffold.showSnackBar(
+    SnackBar(
+      content: Text(message),
+      action: SnackBarAction(
+        label: 'UNDO',
+        onPressed: scaffold.hideCurrentSnackBar,
+      ),
+    ),
+  );
 }

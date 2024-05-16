@@ -38,7 +38,7 @@ class SignUpController extends GetxController {
               'name': userName,
               'email': userEmail,
               'phone': userPhone,
-              'isAdmin': true,
+              'isAdmin': false,
               'deviceToken': userDeviceToken,
             },
           )

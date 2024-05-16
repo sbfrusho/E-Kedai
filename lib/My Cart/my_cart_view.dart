@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shopping_app/const/app-colors.dart';
 import 'package:shopping_app/controller/cart-controller.dart';
+import 'package:shopping_app/utils/AppConstant.dart';
 
 import '../screens/user/checkout-screen.dart';
 
@@ -19,8 +19,11 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColor().colorRed,
-        title: Text('Your Cart' , style: TextStyle(color: Colors.white),),
+        backgroundColor: AppConstant.colorBlue,
+        title: Text(
+          'Your Cart',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       body: Column(
         children: [
@@ -36,7 +39,7 @@ class _CartScreenState extends State<CartScreen> {
                     leading: Image.network(item.productImage),
                     title: Text(item.productName),
                     subtitle: Text(
-                      'price : \$${(double.parse(item.price)  * item.quantity).toStringAsFixed(2)}',
+                      'price : ${(double.parse(item.price) * item.quantity).toStringAsFixed(2)} RM',
                     ),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -85,23 +88,38 @@ class _CartScreenState extends State<CartScreen> {
               },
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Total: \$${cartController.totalPrice.toStringAsFixed(2)}',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.1,
+            child: Container(
+              decoration: BoxDecoration(
+                
+              color: AppConstant.colorBlue.withOpacity(0.5),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(15),
+                  topRight: Radius.circular(15),
+                  bottomLeft: Radius.circular(15),
+                  bottomRight: Radius.circular(15),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    // Place order logic
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => CheckoutScreen()));
-                  },
-                  child: const Text('Place Order'),
-                ),
-              ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Total: ${cartController.totalPrice.toStringAsFixed(2)} RM',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Place order logic
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CheckoutScreen()));
+                    },
+                    child: const Text('Place Order'),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
