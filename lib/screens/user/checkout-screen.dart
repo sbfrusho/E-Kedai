@@ -6,7 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:shopping_app/controller/cart-controller.dart';
 import 'package:shopping_app/controller/get-customer-device-token-controller.dart';
-import 'package:shopping_app/controller/payment-controller/stripe-payment-controller';
 import 'package:shopping_app/utils/AppConstant.dart';
 
 import '../../controller/payment-controller.dart';
@@ -18,7 +17,7 @@ class CheckoutScreen extends StatefulWidget {
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
   late TextEditingController timeController;
-  var paymentController = StripePaymentScreen();
+  final payment = PaymentController();
 
   @override
   void initState() {
@@ -216,7 +215,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   padding: const EdgeInsets.all(20.0),
                   child: ElevatedButton(
                     onPressed: () async {
-
                       if (nameController.text != '' &&
                           phoneController.text != '' &&
                           addressController.text != '' &&
@@ -225,6 +223,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         String phone = phoneController.text.trim();
                         String address = addressController.text.trim();
                         String time = timeController.text.trim();
+                        String total = cartController.totalPrice.toString();
 
                         String? customerToken = await getCustomerDeviceToken();
                         print('Hello world');
@@ -234,18 +233,25 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         print('Address: $address');
                         print('Time: $time');
 
-                        await cartController.placeOrder(
-                          cartController.cartItems,
-                          cartController.totalPrice,
-                          user!.uid,
-                          name,
-                          phone,
-                          address,
-                          'Cash on delivery',
-                          time,
-                        );
+                        if (await payment.makePayment(total)) {
+                          await cartController.placeOrder(
+                            cartController.cartItems,
+                            cartController.totalPrice,
+                            user!.uid,
+                            name,
+                            phone,
+                            address,
+                            'Card',
+                            time,
+                          );
+                        }
 
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => StripePaymentScreen()));
+                        // String amount = cartController.totalPrice.toString();
+
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => StripePaymentScreen()));
 
                         setState(() {
                           isPaymentCompleted = true;
