@@ -226,6 +226,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         String total = cartController.totalPrice.toString();
 
                         String? customerToken = await getCustomerDeviceToken();
+                        
                         print('Hello world');
                         print('Customer Token: $customerToken');
                         print('Name: $name');
