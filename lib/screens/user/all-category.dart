@@ -4,10 +4,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:shopping_app/const/app-colors.dart';
-import 'package:shopping_app/models/product-model.dart';
 import 'package:shopping_app/screens/user/single-category-product-screen.dart';
 import '../../models/Category-model.dart';
 import '../../My Cart/my_cart_view.dart';
+import '../../utils/AppConstant.dart';
 import 'home-screen.dart';
 
 class AllCategoriesScreen extends StatelessWidget {
@@ -22,7 +22,7 @@ class AllCategoriesScreen extends StatelessWidget {
           iconTheme: IconThemeData(
             color: Colors.white,
           ),
-          backgroundColor: AppColor().colorRed,
+          backgroundColor: AppConstant.colorBlue,
           title: Text(
             "All Categories",
             style: TextStyle(color: Colors.white),
@@ -116,7 +116,7 @@ class AllCategoriesScreen extends StatelessWidget {
         ),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: 0,
-          selectedItemColor: Colors.red,
+          selectedItemColor: AppConstant.colorBlue,
           unselectedItemColor: Colors.grey,
           items: const [
             BottomNavigationBarItem(
@@ -146,15 +146,13 @@ class AllCategoriesScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => HomeScreen(),
+                    builder: (context) =>const HomeScreen(),
                   ),
                 );
                 break;
               case 1:
-                // Handle the Wishlist item tap
                 break;
               case 2:
-                // Handle the Categories item tap
                 break;
               case 3:
                 Navigator.push(

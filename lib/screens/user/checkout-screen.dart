@@ -60,7 +60,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     leading: Image.network(item.productImage),
                     title: Text(item.productName),
                     subtitle: Text(
-                      'price : \$${(double.parse(item.price) * item.quantity).toStringAsFixed(2)}',
+                      'price : ${(double.parse(item.price) * item.quantity).toStringAsFixed(2)} RM',
                     ),
                   ),
                 );
@@ -83,7 +83,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Total: \$${cartController.totalPrice.toStringAsFixed(2)}',
+                    'Total: ${cartController.totalPrice.toStringAsFixed(2)} RM',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   ElevatedButton(
@@ -246,6 +246,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             time,
                           );
                         }
+
+                        nameController.dispose();
+                        phoneController.dispose();
+                        addressController.dispose();
+                        timeController.dispose();
+
 
                         // String amount = cartController.totalPrice.toString();
 

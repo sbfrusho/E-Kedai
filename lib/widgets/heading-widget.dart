@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shopping_app/const/app-colors.dart';
+import 'package:shopping_app/utils/AppConstant.dart';
 import 'package:shopping_app/widgets/slider-image.dart';
 
 class HeadingWidget extends StatelessWidget {
@@ -59,7 +60,7 @@ class HeadingWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20.0),
                   border: Border.all(
-                    color: AppColor().colorRed,
+                    color: AppConstant.colorBlack,
                     width: 1.5,
                   ),
                 ),
@@ -68,7 +69,7 @@ class HeadingWidget extends StatelessWidget {
                   child: Text(
                     buttonText,
                     style: TextStyle(
-                      color: AppColor().colorRed,
+                      color: AppConstant.colorBlack,
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
                     ),

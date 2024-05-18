@@ -12,6 +12,7 @@ import 'package:shopping_app/controller/cart-model-controller.dart';
 import 'package:shopping_app/screens/user/checkout-screen.dart';
 import 'package:shopping_app/screens/user/home-screen.dart';
 import 'package:shopping_app/screens/user/product-detailscreen.dart';
+import 'package:shopping_app/utils/AppConstant.dart';
 import '../../My Cart/my_cart_view.dart';
 import '../../models/product-model.dart';
 
@@ -35,7 +36,7 @@ class SingleProductView extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColor().backgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColor().colorRed,
+        backgroundColor: AppConstant.colorBlue,
         title: Text(categoryName, style: TextStyle(color: Colors.white)),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
@@ -174,7 +175,7 @@ class SingleProductView extends StatelessWidget {
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 0,
-        selectedItemColor: Colors.red,
+        selectedItemColor: AppConstant.colorViolet,
         unselectedItemColor: Colors.grey,
         items: const [
           BottomNavigationBarItem(

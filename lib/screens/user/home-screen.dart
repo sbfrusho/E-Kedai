@@ -7,14 +7,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:shopping_app/My%20Cart/my_cart_view.dart';
 import 'package:shopping_app/controller/cart-controller.dart';
+import 'package:shopping_app/models/Category-model.dart';
 import 'package:shopping_app/screens/auth-ui/welcome-screen.dart';
 import 'package:shopping_app/screens/user/all-category.dart';
+import 'package:shopping_app/screens/user/single-category-product-screen.dart';
 import 'package:shopping_app/utils/AppConstant.dart';
 import 'package:shopping_app/widgets/banner-widget.dart';
 import 'package:shopping_app/widgets/custom-drawer-widget.dart';
 import 'package:shopping_app/widgets/heading-widget.dart';
 
 import '../../widgets/Categories.dart';
+import '../../widgets/voucher-widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -112,32 +115,37 @@ class _HomeScreenState extends State<HomeScreen> {
                     Categories(),
 
                     HeadingWidget(
-                      headingTitle: "Categories",
-                      subTitle: "Explore the categories",
+                      headingTitle: "Popular",
+                      subTitle: "Recommeded for you",
                       buttonText: "View All",
                       onTap: () {
                         // Handle the tap event
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AllCategoriesScreen(),
-                          ),
-                        );
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => SingleProductView(),
+                        //   ),
+                        // );
                       },
                     ),
                     BannerWidget(),
 
-                    SizedBox(
-                      height: 20.h,
-                    ),
                     HeadingWidget(
-                        headingTitle: "Popular Items",
-                        subTitle: "Choose what you like",
-                        buttonText: "View All",
-                        onTap: () {
-                          // Handle the tap event
-                        }),
-                    Categories(),
+                      headingTitle: "VOuchers",
+                      subTitle: "Make your shopping more fun",
+                      buttonText: "View All",
+                      onTap: () {
+                        // Handle the tap event
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => SingleProductView(),
+                        //   ),
+                        // );
+                      },
+                    ),
+                    VoucherWidget(),
+
                   ],
                 ),
               ),

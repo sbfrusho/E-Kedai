@@ -20,6 +20,13 @@ class Categories extends StatelessWidget {
     return FutureBuilder(
       future: FirebaseFirestore.instance.collection("categories").get(),
       builder: (context,AsyncSnapshot<QuerySnapshot> snapshot) {
+        CategoriesModel categories = CategoriesModel(
+          categoryId: snapshot.data!.docs[0]['categoryId'],
+          categoryImg: snapshot.data!.docs[0]['categoryImg'],
+          categoryName: snapshot.data!.docs[0]['categoryName'],
+          createdAt: snapshot.data!.docs[0]['createdAt'],
+          updatedAt: snapshot.data!.docs[0]['updatedAt'],
+        );
         if(snapshot.hasError){
           return Center(child: Text("Error: ${snapshot.error}"),);
         }
@@ -46,10 +53,10 @@ class Categories extends StatelessWidget {
                           padding: const EdgeInsets.all(10),
                           child: GestureDetector(
                             onTap: () {
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) => SingleProductView(categoryId:,)));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => SingleProductView(categoryId: categories.categoryId, categoryName: categories.categoryName,)));
                             },
                             child: Column(
                               children: [

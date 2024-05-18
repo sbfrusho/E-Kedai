@@ -1,11 +1,13 @@
 // ignore_for_file: prefer_const_constructors, use_super_parameters, prefer_const_constructors_in_immutables, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:shopping_app/const/app-colors.dart';
 import 'package:shopping_app/controller/cart-controller.dart';
 import 'package:shopping_app/models/product-model.dart';
 import 'package:shopping_app/screens/user/home-screen.dart';
+import 'package:shopping_app/utils/AppConstant.dart';
 
 import '../../My Cart/my_cart_view.dart';
 import '../../controller/cart-model-controller.dart';
@@ -25,7 +27,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColor().colorRed,
+        backgroundColor: AppConstant.colorBlue,
         title: Text(widget.productModel.productName),
       ),
       body: SingleChildScrollView(
@@ -88,8 +90,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+
         onPressed: () {
-          // Add the product to the cart
           cartController.addToCart(
             CartItem(
             productId: widget.productModel.productId,
@@ -99,6 +101,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             quantity: 1,
           ));
 
+          Fluttertoast.showToast(msg: "Product added to cart" , backgroundColor: Colors.green , textColor: Colors.white , gravity: ToastGravity.BOTTOM);
+
           
         },
         child: Icon(Icons.add),
@@ -106,7 +110,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 0,
-        selectedItemColor: Colors.red,
+        selectedItemColor: AppConstant.colorBlue,
         unselectedItemColor: Colors.grey,
         items: const [
           BottomNavigationBarItem(
