@@ -4,11 +4,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:shopping_app/const/app-colors.dart';
 import 'package:shopping_app/controller/cart-controller.dart';
 import 'package:shopping_app/controller/get-customer-device-token-controller.dart';
-import 'package:shopping_app/controller/payment-controller.dart';
+import 'package:shopping_app/controller/payment-controller/stripe-payment-controller';
 import 'package:shopping_app/utils/AppConstant.dart';
+
+import '../../controller/payment-controller.dart';
 
 class CheckoutScreen extends StatefulWidget {
   @override
@@ -17,7 +18,7 @@ class CheckoutScreen extends StatefulWidget {
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
   late TextEditingController timeController;
-  var paymentController = Get.put(PaymentController());
+  var paymentController = StripePaymentScreen();
 
   @override
   void initState() {
@@ -215,7 +216,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   padding: const EdgeInsets.all(20.0),
                   child: ElevatedButton(
                     onPressed: () async {
-                      await paymentController.makePayment();
 
                       if (nameController.text != '' &&
                           phoneController.text != '' &&
@@ -244,6 +244,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           'Cash on delivery',
                           time,
                         );
+
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => StripePaymentScreen()));
 
                         setState(() {
                           isPaymentCompleted = true;

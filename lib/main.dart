@@ -14,24 +14,24 @@ import 'controller/cart-controller.dart';
 import 'screens/splash-scree.dart';
 import 'screens/user/home-screen.dart';
 
-
-
-void main() async{
-  Stripe.publishableKey = "pk_test_51J0ZQvK5Q6ZQ6ZQvK5Q6ZQ6ZQvK5Q6ZQ6ZQ6ZQvK5Q6ZQ6ZQvK5Q6ZQ6ZQ6ZQvK5Q6ZQ6ZQ6ZQ6ZQ6ZQvK5";
+void main() async {
+  Stripe.publishableKey =
+      "pk_test_51PGXvy06xtEbkBYxUkFo4Sdng5zZTx4tcKZynJcUyAreSpphCrtXk8wOC54TXKTYMT4R6oVVcYpf0EZUEw1wTXZq00122GrocM";
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-  //   options: const FirebaseOptions(
-  //   apiKey: "AIzaSyA7AjYocASnUxdv4nVcJ3LAWjVva4hjtGY",
-  //   appId: "1:1049642488385:android:eab6445f1f78f7827b6cc0",
-  //   messagingSenderId: "1049642488385",
-  //   projectId: "utm-shopping-app-5b973",
-  // )
+    //   options: const FirebaseOptions(
+    //   apiKey: "AIzaSyA7AjYocASnUxdv4nVcJ3LAWjVva4hjtGY",
+    //   appId: "1:1049642488385:android:eab6445f1f78f7827b6cc0",
+    //   messagingSenderId: "1049642488385",
+    //   projectId: "utm-shopping-app-5b973",
+    // )
   );
 
-  BindingsBuilder(() { 
-    Get.put(CartController());});
-  
+  BindingsBuilder(() {
+    Get.put(CartController());
+  });
+
   runApp(const MyApp());
 }
 
@@ -41,10 +41,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     return ScreenUtilInit(
       designSize: const Size(360, 690),
-      
       builder: (BuildContext context, Widget? child) => MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'UTM E-COMMERCE APP',
@@ -52,9 +50,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         home: SplashScreen(),
-        
       ),
     );
   }
 }
-
