@@ -1,14 +1,14 @@
-//ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables , unused_field, prefer_final_fields
+//ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables , unused_field, prefer_final_fields, use_key_in_widget_constructors, must_be_immutable
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:path/path.dart';
 import 'package:shopping_app/const/app-colors.dart';
 import 'package:shopping_app/controller/get-user-data-controller.dart';
 import 'package:shopping_app/screens/auth-ui/login-screen.dart';
+
+import '../My Cart/my_cart_view.dart';
 
 class DrawerWidget extends StatelessWidget {
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -43,16 +43,16 @@ class DrawerWidget extends StatelessWidget {
             ),
             child: Column(
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(50),
-                  child: Image(
-                    image: AssetImage('assets/user/user.png'),
-                    height: 50.h,
-                    width: 50.w,
-                  ),
-                ),
+                // ClipRRect(
+                //   borderRadius: BorderRadius.circular(50),
+                //   child: Image(
+                //     image: AssetImage('assets/user/user.png'),
+                //     height: 50.h,
+                //     width: 50.w,
+                //   ),
+                // ),
                 Text(
-                  "Nabil",
+                  "User",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 24,
@@ -66,7 +66,7 @@ class DrawerWidget extends StatelessWidget {
             title: Text('Account Information'),
             onTap: () {
               // Add your navigation logic here
-              Navigator.pop(context); // Close the drawer
+              // Navigator.pop(context); // Close the drawer
             },
           ),
           ListTile(
@@ -74,7 +74,7 @@ class DrawerWidget extends StatelessWidget {
             title: Text('Password '),
             onTap: () {
               // Add your navigation logic here
-              Navigator.pop(context); // Close the drawer
+              // Navigator.pop(context); // Close the drawer
             },
           ),
           ListTile(
@@ -82,7 +82,7 @@ class DrawerWidget extends StatelessWidget {
             title: Text('My Cart'),
             onTap: () {
               // Add your navigation logic here
-              Navigator.pop(context); // Close the drawer
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>CartScreen())); // Close the drawer
             },
           ),
           ListTile(

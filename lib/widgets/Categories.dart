@@ -9,7 +9,6 @@ import 'package:shopping_app/controller/cart-controller.dart';
 import 'package:shopping_app/models/Category-model.dart';
 import 'package:shopping_app/screens/user/single-category-product-screen.dart';
 
-
 class Categories extends StatelessWidget {
   // const Categories({
   //   super.key,
@@ -19,7 +18,7 @@ class Categories extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: FirebaseFirestore.instance.collection("categories").get(),
-      builder: (context,AsyncSnapshot<QuerySnapshot> snapshot) {
+      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         CategoriesModel categories = CategoriesModel(
           categoryId: snapshot.data!.docs[0]['categoryId'],
           categoryImg: snapshot.data!.docs[0]['categoryImg'],
@@ -27,13 +26,13 @@ class Categories extends StatelessWidget {
           createdAt: snapshot.data!.docs[0]['createdAt'],
           updatedAt: snapshot.data!.docs[0]['updatedAt'],
         );
-        if(snapshot.hasError){
-          return Center(child: Text("Error: ${snapshot.error}"),);
-        }
-        else if(snapshot.connectionState == ConnectionState.waiting){
+        if (snapshot.hasError) {
+          return Center(
+            child: Text("Error: ${snapshot.error}"),
+          );
+        } else if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
-        }
-        else if(snapshot.hasData){
+        } else if (snapshot.hasData) {
           return Container(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,7 +47,8 @@ class Categories extends StatelessWidget {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: snapshot.data!.docs.map((DocumentSnapshot document) {
+                      children:
+                          snapshot.data!.docs.map((DocumentSnapshot document) {
                         return Padding(
                           padding: const EdgeInsets.all(10),
                           child: GestureDetector(
@@ -56,12 +56,17 @@ class Categories extends StatelessWidget {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => SingleProductView(categoryId: categories.categoryId, categoryName: categories.categoryName,)));
+                                      builder: (context) => SingleProductView(
+                                            categoryId: categories.categoryId,
+                                            categoryName:
+                                                categories.categoryName,
+                                          )));
                             },
                             child: Column(
                               children: [
                                 Image(
-                                  image: CachedNetworkImageProvider(document['categoryImg']),
+                                  image: CachedNetworkImageProvider(
+                                      document['categoryImg']),
                                   height: 100.h,
                                 ),
                                 Text(document['categoryName']),
@@ -76,9 +81,10 @@ class Categories extends StatelessWidget {
               ],
             ),
           );
-        }
-        else if(snapshot.data!.docs.isEmpty){
-          return Center(child: Text("No data found"),);
+        } else if (snapshot.data!.docs.isEmpty) {
+          return Center(
+            child: Text("No data found"),
+          );
         }
         return Container();
       },
