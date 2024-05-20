@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, use_super_parameters, unused_local_variable
+// ignore_for_file: prefer_const_constructors, use_super_parameters, unused_local_variable, must_be_immutable
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
