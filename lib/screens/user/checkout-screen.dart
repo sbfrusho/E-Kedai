@@ -302,8 +302,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   Future<void> sendEmail(String recipient, String subject, String body) async {
-    String username = "s2010776109@ru.ac.bd";
-    String password = "b00cf74ff7";
+    String username = "mdtawfiquzzaman@gmail.com";//s2010776109@ru.ac.bd
+    String password = "put your password here";//your original password
 
     final smtpServer = gmail(username, password);
 
