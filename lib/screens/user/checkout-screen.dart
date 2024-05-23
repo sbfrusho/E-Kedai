@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,8 +5,9 @@ import 'package:get/get.dart';
 import 'package:shopping_app/controller/cart-controller.dart';
 import 'package:shopping_app/controller/get-customer-device-token-controller.dart';
 import 'package:shopping_app/utils/AppConstant.dart';
-
-import '../../controller/payment-controller.dart';
+import 'package:shopping_app/controller/payment-controller.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server.dart';
 
 class CheckoutScreen extends StatefulWidget {
   @override
@@ -26,12 +25,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   final CartController cartController = Get.find<CartController>();
-
   User? user = FirebaseAuth.instance.currentUser;
 
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController addressController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
 
   bool isPaymentCompleted = false;
 
@@ -185,6 +184,24 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   child: Container(
                     height: 55.0.h,
                     child: TextFormField(
+                      keyboardType: TextInputType.streetAddress,
+                      textInputAction: TextInputAction.next,
+                      controller: emailController,
+                      decoration: InputDecoration(
+                        hintText: 'Enter your Email',
+                        labelText: 'Email',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Container(
+                    height: 55.0.h,
+                    child: TextFormField(
                       controller: timeController,
                       readOnly: true,
                       decoration: InputDecoration(
@@ -218,7 +235,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       if (nameController.text != '' &&
                           phoneController.text != '' &&
                           addressController.text != '' &&
-                          timeController.text != '') {
+                          timeController.text != '' && emailController.text != '') {
                         String name = nameController.text.trim();
                         String phone = phoneController.text.trim();
                         String address = addressController.text.trim();
@@ -226,7 +243,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         String total = cartController.totalPrice.toString();
 
                         String? customerToken = await getCustomerDeviceToken();
-                        
+
                         print('Hello world');
                         print('Customer Token: $customerToken');
                         print('Name: $name');
@@ -245,24 +262,24 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             'Card',
                             time,
                           );
+
+                          await sendEmail(
+                            user!.email!,
+                            'Order Confirmation',
+                            'Your order has been placed successfully. Total amount: $total RM',
+                          );
+
+                          setState(() {
+                            isPaymentCompleted = true;
+                          });
                         }
 
-                        nameController.dispose();
-                        phoneController.dispose();
-                        addressController.dispose();
-                        timeController.dispose();
-
-
-                        // String amount = cartController.totalPrice.toString();
-
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => StripePaymentScreen()));
-
-                        setState(() {
-                          isPaymentCompleted = true;
-                        });
+                        nameController.clear();
+                        phoneController.clear();
+                        addressController.clear();
+                        timeController.clear();
+                        emailController.clear();
+                        
                       } else {}
                     },
                     child: Text('Confirm Order'),
@@ -282,5 +299,28 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         );
       },
     );
+  }
+
+  Future<void> sendEmail(String recipient, String subject, String body) async {
+    String username = "s2010776109@ru.ac.bd";
+    String password = "b00cf74ff7";
+
+    final smtpServer = gmail(username, password);
+
+    final message = Message()
+      ..from = Address(username, 'E-Kedai')
+      ..recipients.add(recipient)
+      ..subject = subject
+      ..text = body;
+
+    try {
+      final sendReport = await send(message, smtpServer);
+      print('Message sent: ' + sendReport.toString());
+    } on MailerException catch (e) {
+      print('Message not sent. \n' + e.toString());
+      for (var p in e.problems) {
+        print('Problem: ${p.code}: ${p.msg}');
+      }
+    }
   }
 }
