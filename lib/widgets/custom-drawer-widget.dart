@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:shopping_app/const/app-colors.dart';
 import 'package:shopping_app/controller/get-user-data-controller.dart';
 import 'package:shopping_app/screens/auth-ui/login-screen.dart';
+import 'package:shopping_app/screens/user/all-category.dart';
 
 import '../My Cart/my_cart_view.dart';
 
@@ -29,7 +30,7 @@ class DrawerWidget extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: <Widget>[
           ListTile(
-            tileColor: AppColor().colorRed,
+            tileColor: Colors.blue,
             iconColor: Colors.white,
             leading: Icon(Icons.arrow_back),
             onTap: (){
@@ -39,7 +40,7 @@ class DrawerWidget extends StatelessWidget {
           DrawerHeader(
             
             decoration: BoxDecoration(
-              color: AppColor().colorRed,
+              color: Colors.blue,
             ),
             child: Column(
               children: [
@@ -52,7 +53,7 @@ class DrawerWidget extends StatelessWidget {
                 //   ),
                 // ),
                 Text(
-                  "User",
+                  "E-kedai",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 24,
@@ -60,22 +61,6 @@ class DrawerWidget extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-          ListTile(
-            leading: Icon(Icons.account_circle),
-            title: Text('Account Information'),
-            onTap: () {
-              // Add your navigation logic here
-              // Navigator.pop(context); // Close the drawer
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.lock),
-            title: Text('Password '),
-            onTap: () {
-              // Add your navigation logic here
-              // Navigator.pop(context); // Close the drawer
-            },
           ),
           ListTile(
             leading: Icon(Icons.shopping_cart),
@@ -86,35 +71,11 @@ class DrawerWidget extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(Icons.shopping_bag),
-            title: Text('Order'),
+            leading: Icon(Icons.shopping_cart),
+            title: Text('All Categories'),
             onTap: () {
               // Add your navigation logic here
-              Navigator.pop(context); // Close the drawer
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.favorite),
-            title: Text('Wishlist'),
-            onTap: () {
-              // Add your navigation logic here
-              Navigator.pop(context); // Close the drawer
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.notifications),
-            title: Text('Notifications'),
-            onTap: () {
-              // Add your navigation logic here
-              Navigator.pop(context); // Close the drawer
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Settings'),
-            onTap: () {
-              // Add your navigation logic here
-              Navigator.pop(context); // Close the drawer
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>AllCategoriesScreen())); // Close the drawer
             },
           ),
 
