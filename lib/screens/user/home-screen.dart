@@ -1,24 +1,27 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
-import 'package:shopping_app/controller/popular-item-controller.dart';
+import 'package:shopping_app/const/app-colors.dart';
+import 'package:shopping_app/controller/cart-controller.dart';
+import 'package:shopping_app/models/product-model.dart';
+import 'package:shopping_app/screens/auth-ui/welcome-screen.dart';
 import 'package:shopping_app/screens/user/all-category.dart';
 import 'package:shopping_app/screens/user/all-product-screen.dart';
 import 'package:shopping_app/screens/user/product-detailscreen.dart';
-
+import 'package:shopping_app/screens/user/search-result-screen.dart';
+import 'package:shopping_app/utils/AppConstant.dart';
+import 'package:shopping_app/widgets/banner-widget.dart';
+import 'package:shopping_app/widgets/custom-drawer-widget.dart';
+import 'package:shopping_app/widgets/heading-widget.dart';
+import 'package:shopping_app/widgets/popular-item-widget.dart';
+import 'package:shopping_app/widgets/popular-widget.dart';
 import '../../My Cart/my_cart_view.dart';
-import '../../controller/cart-controller.dart';
-import '../../models/product-model.dart';
-import '../../utils/AppConstant.dart';
+import '../../controller/popular-item-controller.dart';
 import '../../widgets/Categories.dart';
-import '../../widgets/custom-drawer-widget.dart';
-import '../../widgets/heading-widget.dart';
 import '../../widgets/voucher-widget.dart';
-import '../auth-ui/welcome-screen.dart';
+// import 'search_results_screen.dart'; // Import the new screen
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -33,14 +36,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final PopularController popularController = Get.put(PopularController());
 
   TextEditingController _searchController = TextEditingController();
-  List<ProductModel> _filteredProducts = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _filteredProducts = popularController.products;
-    _searchController.addListener(_filterProducts);
-  }
 
   @override
   void dispose() {
@@ -48,13 +43,17 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  void _filterProducts() {
-    final query = _searchController.text.toLowerCase();
-    setState(() {
-      _filteredProducts = popularController.products.where((product) {
-        return product.productName.toLowerCase().contains(query);
-      }).toList();
-    });
+  void _filterProducts(String query) {
+    final filteredProducts = popularController.products.where((product) {
+      return product.productName.toLowerCase().contains(query.toLowerCase());
+    }).toList();
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SearchResultsScreen(searchResults: filteredProducts),
+      ),
+    );
   }
 
   @override
@@ -106,197 +105,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             borderRadius: BorderRadius.circular(20),
                           ),
                         ),
+                        onSubmitted: (query) {
+                          if (query.isNotEmpty) {
+                            _filterProducts(query);
+                          }
+                        },
                       ),
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      margin: EdgeInsets.symmetric(vertical: 10),
-                      child: Column(
-                        children: [
-                          HeadingWidget(
-                            headingTitle: "Categories",
-                            subTitle: "",
-                            buttonText: "See All",
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => AllCategoriesScreen(),
-                                ),
-                              );
-                            },
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 50),
-                            child: Categories(),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      margin: EdgeInsets.symmetric(vertical: 10),
-                      child: Column(
-                        children: [
-                          HeadingWidget(
-                            headingTitle: "Popular",
-                            subTitle: "",
-                            buttonText: "See All",
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          AllPopularItemsScreen()));
-                            },
-                          ),
-                          Obx(() {
-                            return CarouselSlider.builder(
-                              itemCount: (_filteredProducts.length / 5).ceil(),
-                              itemBuilder: (context, index, _) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: GridView.builder(
-                                    gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      crossAxisSpacing: 3,
-                                      mainAxisSpacing: 3,
-                                      childAspectRatio: .6,
-                                    ),
-                                    shrinkWrap: true,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    itemCount: _filteredProducts.length,
-                                    itemBuilder: (context, innerIndex) {
-                                      int realIndex = index * 5 + innerIndex;
-                                      if (realIndex >=
-                                          _filteredProducts.length) {
-                                        return SizedBox.shrink();
-                                      }
-                                      ProductModel product =
-                                          _filteredProducts[realIndex];
-                                      return GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ProductDetailScreen(
-                                                productModel: product,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        child: Card(
-                                          elevation: 2,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Expanded(
-                                                child: CachedNetworkImage(
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .height *
-                                                      0.2,
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.5,
-                                                  imageUrl:
-                                                      product.productImages[0],
-                                                  placeholder: (context, url) =>
-                                                      CircularProgressIndicator(),
-                                                  errorWidget:
-                                                      (context, url, error) =>
-                                                          Icon(Icons.error),
-                                                  fit: BoxFit.fitWidth,
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      product.productName,
-                                                      style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                    SizedBox(height: 4),
-                                                    Text(
-                                                      'Sale Price: ${product.salePrice}',
-                                                      style: TextStyle(
-                                                          fontSize: 14),
-                                                    ),
-                                                    SizedBox(height: 4),
-                                                    Text(
-                                                      'Full Price: ${product.fullPrice}',
-                                                      style: TextStyle(
-                                                          fontSize: 14),
-                                                    ),
-                                                    SizedBox(height: 8),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                );
-                              },
-                              options: CarouselOptions(
-                                aspectRatio: 16 / 9,
-                                viewportFraction: 0.8,
-                                initialPage: 0,
-                                enableInfiniteScroll: true,
-                                autoPlay: true,
-                                autoPlayInterval: Duration(seconds: 3),
-                                autoPlayAnimationDuration:
-                                    Duration(milliseconds: 800),
-                                autoPlayCurve: Curves.fastOutSlowIn,
-                                enlargeCenterPage: true,
-                                scrollDirection: Axis.horizontal,
-                              ),
-                            );
-                          }),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      margin: EdgeInsets.symmetric(vertical: 10),
-                      child: Column(
-                        children: [
-                          HeadingWidget(
-                            headingTitle: "Vouchers",
-                            subTitle: "Make your shopping more fun",
-                            buttonText: "View All",
-                            onTap: () {},
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: VoucherWidget(),
-                          ),
-                        ],
-                      ),
-                    ),
+                    _buildHomeContent(),
                   ],
                 ),
               ),
@@ -330,6 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     builder: (context) => const HomeScreen(),
                   ),
                 );
+                break;
               case 1:
                 Navigator.push(
                   context,
@@ -347,6 +164,186 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
       ),
+    );
+  }
+
+  Widget _buildHomeContent() {
+    return Column(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(30),
+          ),
+          margin: EdgeInsets.symmetric(vertical: 10),
+          child: Column(
+            children: [
+              HeadingWidget(
+                headingTitle: "Categories",
+                subTitle: "",
+                buttonText: "See All",
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AllCategoriesScreen(),
+                    ),
+                  );
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 50),
+                child: Categories(),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(30),
+          ),
+          margin: EdgeInsets.symmetric(vertical: 10),
+          child: Column(
+            children: [
+              HeadingWidget(
+                headingTitle: "Popular Items",
+                subTitle: "",
+                buttonText: "See All",
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AllPopularItemsScreen()));
+                },
+              ),
+              Obx(() {
+                return CarouselSlider.builder(
+                  itemCount: (popularController.products.length / 5).ceil(),
+                  itemBuilder: (context, index, _) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 3,
+                          mainAxisSpacing: 3,
+                          childAspectRatio: .5,
+                        ),
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: popularController.products.length,
+                        itemBuilder: (context, innerIndex) {
+                          int realIndex = index * 5 + innerIndex;
+                          if (realIndex >= popularController.products.length) {
+                            return SizedBox.shrink();
+                          }
+                          ProductModel product =
+                              popularController.products[realIndex];
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProductDetailScreen(
+                                    productModel: product,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Card(
+                              elevation: 2,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: CachedNetworkImage(
+                                      height: MediaQuery.of(context).size.height *
+                                          0.2,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.5,
+                                      imageUrl: product.productImages[0],
+                                      placeholder: (context, url) =>
+                                          CircularProgressIndicator(),
+                                      errorWidget: (context, url, error) =>
+                                          Icon(Icons.error),
+                                      fit: BoxFit.fitWidth,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          product.productName,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        // SizedBox(height: 4),
+                                        // Text(
+                                        //   'Sale Price: ${product.salePrice}',
+                                        //   style: TextStyle(fontSize: 14),
+                                        // ),
+                                        // SizedBox(height: 4),
+                                        // Text(
+                                        //   'Full Price: ${product.fullPrice}',
+                                        //   style: TextStyle(fontSize: 14),
+                                        // ),
+                                        // SizedBox(height: 8),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  },
+                  options: CarouselOptions(
+                    aspectRatio: 16 / 9,
+                    viewportFraction: 0.8,
+                    initialPage: 0,
+                    enableInfiniteScroll: true,
+                    autoPlay: true,
+                    autoPlayInterval: Duration(seconds: 3),
+                    autoPlayAnimationDuration: Duration(milliseconds: 800),
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    enlargeCenterPage: true,
+                    scrollDirection: Axis.horizontal,
+                  ),
+                );
+              }),
+            ],
+          ),
+        ),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(30),
+          ),
+          margin: EdgeInsets.symmetric(vertical: 10),
+          child: Column(
+            children: [
+              HeadingWidget(
+                headingTitle: "Vouchers",
+                subTitle: "Make your shopping more fun",
+                buttonText: "View All",
+                onTap: () {},
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: VoucherWidget(),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

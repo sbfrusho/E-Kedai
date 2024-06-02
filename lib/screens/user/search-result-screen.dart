@@ -6,46 +6,41 @@ import 'package:shopping_app/screens/user/product-detailscreen.dart';
 class SearchResultsScreen extends StatelessWidget {
   final List<ProductModel> searchResults;
 
-  const SearchResultsScreen({Key? key, required this.searchResults}) : super(key: key);
+  SearchResultsScreen({required this.searchResults});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Search Results'),
-        backgroundColor: Colors.blue,
+        title: Text("Search Results"),
       ),
-      body: ListView.builder(
-        itemCount: searchResults.length,
-        itemBuilder: (context, index) {
-          final product = searchResults[index];
-          return ListTile(
-            leading: CachedNetworkImage(
-              imageUrl: product.productImages[0],
-              placeholder: (context, url) => CircularProgressIndicator(),
-              errorWidget: (context, url, error) => Icon(Icons.error),
-            ),
-            title: Text(product.productName),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Sale Price: ${product.salePrice}'),
-                Text('Full Price: ${product.fullPrice}'),
-              ],
-            ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ProductDetailScreen(
-                    productModel: product,
+      body: searchResults.isEmpty
+          ? Center(child: Text("No products found."))
+          : ListView.builder(
+              itemCount: searchResults.length,
+              itemBuilder: (context, index) {
+                ProductModel product = searchResults[index];
+                return ListTile(
+                  title: Text(product.productName),
+                  subtitle: Text('Sale Price: ${product.salePrice}'),
+                  leading: CachedNetworkImage(
+                    imageUrl: product.productImages[0],
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
-                ),
-              );
-            },
-          );
-        },
-      ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProductDetailScreen(
+                          productModel: product,
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
     );
   }
 }
