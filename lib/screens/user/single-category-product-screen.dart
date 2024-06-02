@@ -26,8 +26,6 @@ class SingleProductView extends StatelessWidget {
       {Key? key, required this.categoryId, required this.categoryName})
       : super(key: key);
 
-  
-
   @override
   Widget build(BuildContext context) {
     BindingsBuilder(() {
@@ -64,10 +62,10 @@ class SingleProductView extends StatelessWidget {
           return // Your code with adjustments
               GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
+              crossAxisCount: 3,
               crossAxisSpacing: 3,
               mainAxisSpacing: 3,
-              childAspectRatio: .6, // Adjusted value
+              childAspectRatio: .4, // Adjusted value
             ),
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) {
@@ -76,7 +74,13 @@ class SingleProductView extends StatelessWidget {
               );
               return GestureDetector(
                 onTap: () {
-                  // Navigate to product details screen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ProductDetailScreen(productModel: product),
+                    ),
+                  );
                 },
                 child: Card(
                   elevation: 2,
@@ -120,16 +124,21 @@ class SingleProductView extends StatelessWidget {
                             ),
                             SizedBox(height: 4),
                             Text(
-                              'Sale Price: ${product.salePrice}',
+                              'Sale Price: ${product.salePrice} RM',
                               style: TextStyle(fontSize: 14),
                             ),
                             SizedBox(height: 4),
                             Text(
-                              'Full Price: ${product.fullPrice}',
+                              'Full Price: ${product.fullPrice} RM',
                               style: TextStyle(fontSize: 14),
                             ),
                             SizedBox(height: 8),
                             ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors
+                                    .blue,
+                                    // padding: EdgeInsets.symmetric(vertical: 12), // Set the background color here
+                              ),
                               onPressed: () {
                                 if (cartController.cartItems.any((element) =>
                                     element.productId == product.productId)) {
@@ -139,7 +148,6 @@ class SingleProductView extends StatelessWidget {
                                       'Please go to cart to update quantity');
                                   return;
                                 } else {
-                                  
                                   cartController.addToCart(
                                     CartItem(
                                       productId: product.productId,
@@ -160,7 +168,10 @@ class SingleProductView extends StatelessWidget {
                                   );
                                 }
                               },
-                              child: Text('Add to Cart'),
+                              child: Icon(
+                                Icons.add_shopping_cart,
+                                color: Colors.white,
+                              ),
                             ),
                           ],
                         ),
@@ -175,20 +186,12 @@ class SingleProductView extends StatelessWidget {
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 0,
-        selectedItemColor: AppConstant.colorViolet,
+        selectedItemColor: AppConstant.colorBlue,
         unselectedItemColor: Colors.grey,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Wishlist',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.category),
-            label: 'Categories',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
@@ -205,17 +208,10 @@ class SingleProductView extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => HomeScreen(),
+                  builder: (context) => const HomeScreen(),
                 ),
               );
-              break;
             case 1:
-              // Handle the Wishlist item tap
-              break;
-            case 2:
-              // Handle the Categories item tap
-              break;
-            case 3:
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -225,7 +221,7 @@ class SingleProductView extends StatelessWidget {
                 ),
               );
               break;
-            case 4:
+            case 2:
               // Handle the Profile item tap
               break;
           }

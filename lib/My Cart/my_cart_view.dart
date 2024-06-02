@@ -6,6 +6,7 @@ import 'package:shopping_app/controller/cart-controller.dart';
 import 'package:shopping_app/utils/AppConstant.dart';
 
 import '../screens/user/checkout-screen.dart';
+import '../screens/user/home-screen.dart';
 
 class CartScreen extends StatefulWidget {
   @override
@@ -124,6 +125,49 @@ class _CartScreenState extends State<CartScreen> {
           ),
         ],
       ),
+      bottomNavigationBar: BottomNavigationBar(
+          currentIndex: 0,
+          selectedItemColor: AppConstant.colorBlue,
+          unselectedItemColor: Colors.grey,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.shopping_cart),
+              label: 'Cart',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: 'Profile',
+            ),
+          ],
+          onTap: (index) {
+            switch (index) {
+              case 0:
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HomeScreen(),
+                  ),
+                );
+              case 1:
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CartScreen(
+                        // cartItems: [],
+                        ),
+                  ),
+                );
+                break;
+              case 2:
+                // Handle the Profile item tap
+                break;
+            }
+          },
+        ),
     );
   }
 }

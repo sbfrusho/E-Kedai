@@ -4,10 +4,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:shopping_app/controller/cart-controller.dart';
 import 'package:shopping_app/controller/get-customer-device-token-controller.dart';
+import 'package:shopping_app/screens/user/home-screen.dart';
 import 'package:shopping_app/utils/AppConstant.dart';
 import 'package:shopping_app/controller/payment-controller.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
+
+import '../../My Cart/my_cart_view.dart';
 
 class CheckoutScreen extends StatefulWidget {
   @override
@@ -98,6 +101,49 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           ),
         ],
       ),
+      bottomNavigationBar: BottomNavigationBar(
+          currentIndex: 0,
+          selectedItemColor: AppConstant.colorBlue,
+          unselectedItemColor: Colors.grey,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.shopping_cart),
+              label: 'Cart',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: 'Profile',
+            ),
+          ],
+          onTap: (index) {
+            switch (index) {
+              case 0:
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HomeScreen(),
+                  ),
+                );
+              case 1:
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CartScreen(
+                        // cartItems: [],
+                        ),
+                  ),
+                );
+                break;
+              case 2:
+                // Handle the Profile item tap
+                break;
+            }
+          },
+        ),
     );
   }
 

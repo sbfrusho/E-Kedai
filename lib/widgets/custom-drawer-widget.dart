@@ -8,6 +8,7 @@ import 'package:shopping_app/const/app-colors.dart';
 import 'package:shopping_app/controller/get-user-data-controller.dart';
 import 'package:shopping_app/screens/auth-ui/login-screen.dart';
 import 'package:shopping_app/screens/user/all-category.dart';
+import 'package:shopping_app/utils/AppConstant.dart';
 
 import '../My Cart/my_cart_view.dart';
 
@@ -30,7 +31,7 @@ class DrawerWidget extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: <Widget>[
           ListTile(
-            tileColor: Colors.blue,
+            tileColor: AppConstant.colorBlue,
             iconColor: Colors.white,
             leading: Icon(Icons.arrow_back),
             onTap: (){
@@ -40,7 +41,7 @@ class DrawerWidget extends StatelessWidget {
           DrawerHeader(
             
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: AppConstant.colorBlue,
             ),
             child: Column(
               children: [

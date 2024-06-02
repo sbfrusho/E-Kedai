@@ -22,7 +22,7 @@ class HeadingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.grey[300],
+      // color: Colors.grey[300],
       margin: EdgeInsets.symmetric(horizontal: 5.0, vertical: 10.0),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -57,19 +57,19 @@ class HeadingWidget extends StatelessWidget {
             GestureDetector(
               onTap: onTap,
               child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20.0),
-                  border: Border.all(
-                    color: AppConstant.colorBlack,
-                    width: 1.5,
-                  ),
-                ),
+                // decoration: BoxDecoration(
+                //   borderRadius: BorderRadius.circular(20.0),
+                //   border: Border.all(
+                //     // color: AppConstant.colorBlack,
+                //     width: 1.5,
+                //   ),
+                // ),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     buttonText,
                     style: TextStyle(
-                      color: AppConstant.colorBlack,
+                      color: AppConstant.colorBlue,
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
                     ),
