@@ -100,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         decoration: InputDecoration(
                           hintText: 'Search',
                           prefixIcon: const Icon(Icons.search),
-                          suffixIcon: const Icon(Icons.mic),
+                          // suffixIcon: const Icon(Icons.mic),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
@@ -171,6 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       children: [
         Container(
+          height: MediaQuery.of(context).size.height * 0.3,
           decoration: BoxDecoration(
             color: Colors.grey[200],
             borderRadius: BorderRadius.circular(30),
@@ -191,10 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 },
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 50),
-                child: Categories(),
-              ),
+              Categories(),
             ],
           ),
         ),

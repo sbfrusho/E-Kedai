@@ -32,53 +32,41 @@ class Categories extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.only(bottom: 20),
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * .2,
-                    width: MediaQuery.of(context).size.width * .8,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: snapshot.data!.docs.map((DocumentSnapshot document) {
-                          var data = document.data() as Map<String, dynamic>;
-                          CategoriesModel category = CategoriesModel(
-                            categoryId: data['categoryId'],
-                            categoryImg: data['categoryImg'],
-                            categoryName: data['categoryName'],
-                            createdAt: data['createdAt'],
-                            updatedAt: data['updatedAt'],
-                          );
-                          return Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => SingleProductView(
-                                      categoryId: category.categoryId,
-                                      categoryName: category.categoryName,
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: Column(
-                                children: [
-                                  Image(
-                                    image: CachedNetworkImageProvider(category.categoryImg),
-                                    height: 100.h,
-                                  ),
-                                  Text(category.categoryName),
-                                ],
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: snapshot.data!.docs.take(4).map((DocumentSnapshot document) {
+                      var data = document.data() as Map<String, dynamic>;
+                      CategoriesModel category = CategoriesModel(
+                        categoryId: data['categoryId'],
+                        categoryImg: data['categoryImg'],
+                        categoryName: data['categoryName'],
+                        createdAt: data['createdAt'],
+                        updatedAt: data['updatedAt'],
+                      );
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SingleProductView(
+                                categoryId: category.categoryId,
+                                categoryName: category.categoryName,
                               ),
                             ),
                           );
-                        }).toList(),
-                      ),
-                    ),
+                        },
+                        child: Column(
+                          children: [
+                            Image(
+                              image: CachedNetworkImageProvider(category.categoryImg),
+                              height: 100.h,
+                              width: 67.w,
+                            ),
+                            Text(category.categoryName),
+                          ],
+                        ),
+                      );
+                    }).toList(),
                   ),
                 ],
               ),
