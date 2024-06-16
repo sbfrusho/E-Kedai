@@ -1,9 +1,10 @@
+// ignore_for_file: prefer_final_fields, prefer_const_constructors, use_build_context_synchronously
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:shopping_app/const/app-colors.dart';
 import 'package:shopping_app/controller/cart-controller.dart';
 import 'package:shopping_app/models/product-model.dart';
 import 'package:shopping_app/screens/auth-ui/welcome-screen.dart';
@@ -12,11 +13,8 @@ import 'package:shopping_app/screens/user/all-product-screen.dart';
 import 'package:shopping_app/screens/user/product-detailscreen.dart';
 import 'package:shopping_app/screens/user/search-result-screen.dart';
 import 'package:shopping_app/utils/AppConstant.dart';
-import 'package:shopping_app/widgets/banner-widget.dart';
 import 'package:shopping_app/widgets/custom-drawer-widget.dart';
 import 'package:shopping_app/widgets/heading-widget.dart';
-import 'package:shopping_app/widgets/popular-item-widget.dart';
-import 'package:shopping_app/widgets/popular-widget.dart';
 import '../../My Cart/my_cart_view.dart';
 import '../../controller/popular-item-controller.dart';
 import '../../widgets/Categories.dart';
@@ -51,7 +49,8 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => SearchResultsScreen(searchResults: filteredProducts),
+        builder: (context) =>
+            SearchResultsScreen(searchResults: filteredProducts),
       ),
     );
   }
@@ -197,6 +196,85 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         Container(
+          height: MediaQuery.of(context).size.height *
+              0.2, // Increase height to ensure enough space
+          decoration: BoxDecoration(
+            // color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(30),
+          ),
+          margin: EdgeInsets.symmetric(vertical: 10),
+          child: Column(
+            children: [
+              Expanded(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Card(
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                "assets/discount1.png",
+                                height: 50,
+                                width: 50,
+                              ),
+                              SizedBox(width: 10),
+                              Expanded(
+                                child: Text(
+                                  "Get 30% discount on all products",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Card(
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                "assets/discount2.png",
+                                height: 50,
+                                width: 50,
+                              ),
+                              SizedBox(width: 10),
+                              Expanded(
+                                child: Text(
+                                  "Get 10% discount on all sauce",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
           decoration: BoxDecoration(
             color: Colors.grey[200],
             borderRadius: BorderRadius.circular(30),
@@ -220,13 +298,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemCount: (popularController.products.length / 5).ceil(),
                   itemBuilder: (context, index, _) {
                     return Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(5.0),
                       child: GridView.builder(
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 3,
                           crossAxisSpacing: 3,
                           mainAxisSpacing: 3,
-                          childAspectRatio: .5,
+                          childAspectRatio: .49,
                         ),
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
@@ -256,16 +334,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                 children: [
                                   Expanded(
                                     child: CachedNetworkImage(
-                                      height: MediaQuery.of(context).size.height *
-                                          0.2,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.5,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.2,
                                       imageUrl: product.productImages[0],
                                       placeholder: (context, url) =>
                                           CircularProgressIndicator(),
                                       errorWidget: (context, url, error) =>
                                           Icon(Icons.error),
-                                      fit: BoxFit.fitWidth,
+                                      fit: BoxFit.contain,
                                     ),
                                   ),
                                   Padding(
@@ -275,23 +352,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          product.productName,
+                                          product.productName.split(' ').first,
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        // SizedBox(height: 4),
-                                        // Text(
-                                        //   'Sale Price: ${product.salePrice}',
-                                        //   style: TextStyle(fontSize: 14),
-                                        // ),
-                                        // SizedBox(height: 4),
-                                        // Text(
-                                        //   'Full Price: ${product.fullPrice}',
-                                        //   style: TextStyle(fontSize: 14),
-                                        // ),
-                                        // SizedBox(height: 8),
                                       ],
                                     ),
                                   ),

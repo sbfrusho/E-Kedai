@@ -29,12 +29,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppConstant.colorBlue,
-        title: Text(widget.productModel.productName , style: TextStyle(color: Colors.white),),
+        title: Center(
+            child: Text(
+          widget.productModel.productName.split(' ').first,
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        )),
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          
           children: [
             AspectRatio(
               aspectRatio: 2,
@@ -44,7 +49,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ),
             ),
             // Container 1: Product Name, Sale Price, Full Price
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
@@ -90,8 +97,46 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ),
               ),
             ),
+            SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                padding: EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
+                    bottomLeft: Radius.circular(30),
+                    bottomRight: Radius.circular(30),
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Product Collected From:',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      widget.productModel.shopName,
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+              ),
+            ),
             // Conta)
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
@@ -146,52 +191,52 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               textColor: Colors.white,
               gravity: ToastGravity.BOTTOM);
         },
-        child: Icon(Icons.add),
+        child: Icon(Icons.shopping_cart),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       bottomNavigationBar: BottomNavigationBar(
-          currentIndex: 0,
-          selectedItemColor: AppConstant.colorBlue,
-          unselectedItemColor: Colors.grey,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart),
-              label: 'Cart',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profile',
-            ),
-          ],
-          onTap: (index) {
-            switch (index) {
-              case 0:
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const HomeScreen(),
-                  ),
-                );
-              case 1:
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CartScreen(
-                        // cartItems: [],
-                        ),
-                  ),
-                );
-                break;
-              case 2:
-                // Handle the Profile item tap
-                break;
-            }
-          },
-        ),
+        currentIndex: 0,
+        selectedItemColor: AppConstant.colorBlue,
+        unselectedItemColor: Colors.grey,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: 'Cart',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+        onTap: (index) {
+          switch (index) {
+            case 0:
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const HomeScreen(),
+                ),
+              );
+            case 1:
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CartScreen(
+                      // cartItems: [],
+                      ),
+                ),
+              );
+              break;
+            case 2:
+              // Handle the Profile item tap
+              break;
+          }
+        },
+      ),
     );
   }
 
@@ -199,4 +244,3 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     // Check if the product is already in the cart
   }
 }
-

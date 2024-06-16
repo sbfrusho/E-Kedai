@@ -1,4 +1,4 @@
-//ignore_for_file: file_names , prefer_const_constructors_in_immutables, prefer_const_constructors
+// ignore_for_file: file_names , prefer_const_constructors_in_immutables, prefer_const_constructors
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:shopping_app/const/app-colors.dart';
 import 'package:shopping_app/controller/get-user-data-controller.dart';
 import 'package:shopping_app/screens/admin-panel/admin-screen.dart';
+import 'package:shopping_app/screens/user/select-service.dart';
 
 import '../../controller/sign-in-controller.dart';
 import '../user/home-screen.dart';
@@ -43,6 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         body: SingleChildScrollView(
           child: Container(
+            height: mediaQuery.height,
             child: SafeArea(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -81,151 +83,173 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-class LoginForm extends StatelessWidget {
-  final SignInController signInController = Get.put(SignInController());
-  final GetUserDataController getUserDataController =
-      Get.put(GetUserDataController());
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-
+class LoginForm extends StatefulWidget {
   LoginForm({super.key});
+
+  @override
+  _LoginFormState createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
+  final SignInController signInController = Get.put(SignInController());
+  final GetUserDataController getUserDataController = Get.put(GetUserDataController());
+
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  void _handleLogin() async {
+    if (_formKey.currentState!.validate()) {
+      String email = emailController.text.trim();
+      String password = passwordController.text.trim();
+
+      try {
+        UserCredential? userCredential = await signInController.signInMethod(email, password);
+
+        if (userCredential != null) {
+          var userData = await getUserDataController.getUserData(userCredential.user!.uid);
+
+          if (userCredential.user!.emailVerified) {
+            if (userData[0]['isAdmin'] == true) {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => AdminScreen()),
+              );
+              Fluttertoast.showToast(
+                msg: "Welcome Admin",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.red,
+                textColor: Colors.white,
+                fontSize: 16.0,
+              );
+            } else {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => SelectService()),
+              );
+              Fluttertoast.showToast(
+                msg: "Welcome User",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.red,
+                textColor: Colors.white,
+                fontSize: 16.0,
+              );
+            }
+            return; // Return here to prevent showing unnecessary toasts or snackbar
+          } else {
+            showToast(context, "Please verify your email before login");
+          }
+        } else {
+          showToast(context, "Login failed. Please try again.");
+        }
+      } catch (e) {
+        showToast(context, "Login failed. Please try again.");
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: TextFormField(
-              controller: emailController,
-              decoration: InputDecoration(
-                labelText: 'Email',
-                filled: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(50),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Obx(
-              () => TextFormField(
-                controller: passwordController,
-                obscureText: signInController.isPasswordVisible.value,
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: TextFormField(
+                controller: emailController,
                 decoration: InputDecoration(
-                  labelText: 'Password',
+                  labelText: 'Email',
                   filled: true,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(50),
                   ),
-                  suffixIcon: GestureDetector(
-                    onTap: () {
-                      signInController.isPasswordVisible.toggle();
-                    },
-                    child: signInController.isPasswordVisible.value
-                        ? const Icon(Icons.visibility_off)
-                        : const Icon(Icons.visibility),
-                  ),
                 ),
-              ),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const ForgotPasswordScreen()));
+                textInputAction: TextInputAction.next,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your email';
+                  }
+                  return null;
                 },
-                child: Text(
-                  "Forgot Password",
-                  style: TextStyle(color: AppColor().colorRed),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Obx(
+                () => TextFormField(
+                  controller: passwordController,
+                  obscureText: !signInController.isPasswordVisible.value,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    filled: true,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    suffixIcon: GestureDetector(
+                      onTap: () {
+                        signInController.isPasswordVisible.toggle();
+                      },
+                      child: signInController.isPasswordVisible.value
+                          ? const Icon(Icons.visibility_off)
+                          : const Icon(Icons.visibility),
+                    ),
+                  ),
+                  textInputAction: TextInputAction.done,
+                  onFieldSubmitted: (_) => _handleLogin(),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your password';
+                    }
+                    return null;
+                  },
                 ),
               ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Container(
-            width: 100.w,
-            height: 50.h,
-            decoration: BoxDecoration(
-              color: AppColor().colorRed,
-              borderRadius: BorderRadius.circular(50),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                GestureDetector(
-                  onTap: () async {
-                    String email = emailController.text.trim();
-                    String password = passwordController.text.trim();
-
-                    if (email.isEmpty || password.isEmpty) {
-                      showToast(context, "All fields are required");
-                    } else {
-                      UserCredential? userCredential =
-                          await signInController.signInMethod(email, password);
-
-                      var userData = await getUserDataController
-                          .getUserData(userCredential!.user!.uid);
-
-                      if (userCredential != null) {
-                        if (userCredential.user!.emailVerified) {
-                          if (userData[0]['isAdmin'] == true) {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => AdminScreen()));
-
-                                print("Moved to admin screen");
-
-                            Fluttertoast.showToast(
-                                msg: "Welcome Admin",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.BOTTOM,
-                                timeInSecForIosWeb: 1,
-                                backgroundColor: Colors.red,
-                                textColor: Colors.white,
-                                fontSize: 16.0);
-                          } else {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => HomeScreen()));
-                            
-                            Fluttertoast.showToast(
-                                msg: "Welcome User",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.BOTTOM,
-                                timeInSecForIosWeb: 1,
-                                backgroundColor: Colors.red,
-                                textColor: Colors.white,
-                                fontSize: 16.0);
-                          }
-
-                          return; // Return here to prevent showing unnecessary toasts or snackbar
-                        } else {
-                          showToast(
-                              context, "Please verify your email before login");
-                        }
-                      } else {
-                        showToast(context, "Login failed. Please try again.");
-                      }
-                    }
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const ForgotPasswordScreen()));
                   },
                   child: Text(
-                    "Login",
-                    style: TextStyle(
-                        fontSize: 12.sp,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold),
+                    "Forgot Password",
+                    style: TextStyle(color: AppColor().colorRed),
                   ),
                 ),
               ],
             ),
-          ),
-        ],
+            const SizedBox(height: 20),
+            Container(
+              width: 100.w,
+              height: 50.h,
+              decoration: BoxDecoration(
+                color: AppColor().colorRed,
+                borderRadius: BorderRadius.circular(50),
+              ),
+              child: Center(
+                child: GestureDetector(
+                  onTap: _handleLogin,
+                  child: Text(
+                    "Login",
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

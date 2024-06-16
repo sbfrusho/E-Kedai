@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:shopping_app/controller/cart-model-controller.dart';
 
@@ -24,6 +25,7 @@ class CartController extends GetxController {
   }
 
   void clearCart() {
+    print("clear");
     _cartModel.clearCart();
   }
 
@@ -64,9 +66,12 @@ class CartController extends GetxController {
           'quantity': item.quantity,
         });
       }
+      clearCart();
+      Fluttertoast.showToast(msg: "Order complete");
+      
 
       // Clear the cart after placing order
-      clearCart();
+      
 
       // You can show a success message here
     } catch (error) {

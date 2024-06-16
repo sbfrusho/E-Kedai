@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shopping_app/screens/auth-ui/forgot-password-screen.dart';
 import 'package:shopping_app/screens/user/home-screen.dart';
+import 'package:shopping_app/screens/user/select-service.dart';
 import '../../controller/get-user-data-controller.dart';
 import '../../controller/sign-in-controller.dart';
 import 'register-screen.dart';
@@ -189,7 +190,7 @@ class LoginForm extends StatelessWidget {
                     showToast(context, "Login $whoLoggedIn Successful");
 
                     Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => HomeScreen()));
+                        MaterialPageRoute(builder: (context) => SelectService()));
 
                         
                     return; // Return here to prevent showing unnecessary toasts or snackbar

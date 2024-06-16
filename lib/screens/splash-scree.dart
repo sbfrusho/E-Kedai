@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shopping_app/screens/auth-ui/welcome-screen.dart';
 import 'package:shopping_app/screens/user/home-screen.dart';
+import 'package:shopping_app/screens/user/select-service.dart';
 
 import '../utils/AppConstant.dart';
 
@@ -30,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
   //keep user loggedin
   Future<void> keepUserLoggedIn(BuildContext context) async {
     if(user != null){
-     Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+     Navigator.push(context, MaterialPageRoute(builder: (context) => SelectService()));
     }else{
       Navigator.push(context, MaterialPageRoute(builder: (context) => WelcomeScreen()));
     }

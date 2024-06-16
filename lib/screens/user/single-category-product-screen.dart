@@ -35,7 +35,7 @@ class SingleProductView extends StatelessWidget {
       backgroundColor: AppColor().backgroundColor,
       appBar: AppBar(
         backgroundColor: AppConstant.colorBlue,
-        title: Text(categoryName, style: TextStyle(color: Colors.white)),
+        title: Center(child: Text(categoryName, style: TextStyle(color: Colors.white))),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),

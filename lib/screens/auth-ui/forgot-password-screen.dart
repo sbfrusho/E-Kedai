@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:shopping_app/const/app-colors.dart';
 import 'package:shopping_app/screens/auth-ui/login-screen.dart';
+import 'package:shopping_app/utils/AppConstant.dart';
 
 import '../../controller/forgot-password-controller.dart';
 
@@ -16,7 +17,8 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
-  final ForgotPasswordController _forgotPasswordController = Get.put(ForgotPasswordController());
+  final ForgotPasswordController _forgotPasswordController =
+      Get.put(ForgotPasswordController());
   final TextEditingController _emailController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String _errorMessage = '';
@@ -40,7 +42,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: AppColor().colorRed,
+          backgroundColor: AppConstant.colorBlue,
           title: const Text('Forgot Password'),
         ),
         body: Center(
@@ -61,7 +63,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 child: TextField(
                   controller: _emailController,
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)),
                     labelText: 'Email',
                   ),
                 ),
@@ -71,25 +74,34 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Container(
-                  width: 100.w,
-                  height: 50.h,
-                  decoration: BoxDecoration(
-                    color: AppColor().colorRed,
-                    borderRadius: BorderRadius.circular(50),
+                    width: 100.w,
+                    height: 50.h,
+                    decoration: BoxDecoration(
+                      color: AppConstant.colorBlue,
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                            onTap: () {
+                              _resetPassword();
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const LoginScreen()));
+                              Fluttertoast.showToast(
+                                  msg:
+                                      "Password reset email sent. Please check your inbox.");
+                            },
+                            child: const Text(
+                              "Send",
+                              style: TextStyle(color: Colors.white),
+                            ))
+                      ],
+                    ),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                        onTap: (){
-                          _resetPassword();
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
-                          Fluttertoast.showToast(msg: "Password reset email sent. Please check your inbox.");
-                        },
-                        child: const Text("Send" ,style: TextStyle(color: Colors.white),))
-                    ],
-                  ),
-                            ),
                 ],
               ),
               const SizedBox(height: 16.0),
