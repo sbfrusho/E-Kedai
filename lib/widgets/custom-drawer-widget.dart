@@ -11,6 +11,7 @@ import 'package:shopping_app/screens/user/all-category.dart';
 import 'package:shopping_app/utils/AppConstant.dart';
 
 import '../My Cart/my_cart_view.dart';
+import '../screens/auth-ui/welcome-screen.dart';
 
 class DrawerWidget extends StatelessWidget {
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -85,7 +86,7 @@ class DrawerWidget extends StatelessWidget {
             title: Text('Log out'),
             onTap: () {
               auth.signOut();
-              Navigator.push(context, MaterialPageRoute(builder: (context)=> LoginScreen()));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> WelcomeScreen()));
             },
           ),
           
