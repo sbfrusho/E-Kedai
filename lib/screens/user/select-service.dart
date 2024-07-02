@@ -1,12 +1,14 @@
-// ignore_for_file: prefer_final_fields, prefer_const_constructors, use_build_context_synchronously, use_super_parameters
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:shopping_app/My%20Cart/my_cart_view.dart';
+import 'package:shopping_app/screens/user/checkout-screen.dart';
 import 'package:shopping_app/screens/user/home-screen.dart';
+import 'package:shopping_app/utils/AppConstant.dart';
+import 'package:shopping_app/utils/global-variables.dart';
 
 class SelectService extends StatelessWidget {
-  const SelectService({Key? key}) : super(key: key);
+
+  GloablVariableDeclaration globalVariableDeclaration = GloablVariableDeclaration();
 
   @override
   Widget build(BuildContext context) {
@@ -18,18 +20,8 @@ class SelectService extends StatelessWidget {
             "Service",
             style: TextStyle(color: Colors.white),
           ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.logout, color: Colors.white),
-              onPressed: () {
-                // Handle logout logic here
-              },
-            ),
-          ],
-          backgroundColor: Colors.blue,
-        ),
-        drawer: const Drawer(
-          child: Text("Drawer content"), // Replace with your drawer content
+        
+          backgroundColor: AppConstant.colorBlue,
         ),
         body: Center(
           child: Column(
@@ -44,10 +36,11 @@ class SelectService extends StatelessWidget {
                 context,
                 "Self-pick-up",
                 () {
+                  globalVariableDeclaration.setSelectService(true);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const HomeScreen(),
+                      builder: (context) => CheckoutScreen(selectService: true),
                     ),
                   );
                 },
@@ -56,10 +49,11 @@ class SelectService extends StatelessWidget {
                 context,
                 "Order",
                 () {
+                  globalVariableDeclaration.setSelectService(false);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const HomeScreen(),
+                      builder: (context) => CheckoutScreen(selectService: false),
                     ),
                   );
                 },
@@ -68,10 +62,11 @@ class SelectService extends StatelessWidget {
                 context,
                 "Order-on-preferred time",
                 () {
+                  globalVariableDeclaration.setSelectService(true);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const HomeScreen(),
+                      builder: (context) => CheckoutScreen(selectService: true),
                     ),
                   );
                 },
@@ -81,11 +76,11 @@ class SelectService extends StatelessWidget {
                 context,
                 "Cancel",
                 () {
-                  // Close the application
+                  globalVariableDeclaration.setSelectService(true);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const HomeScreen(),
+                      builder: (context) => CartScreen(),
                     ),
                   );
                 },

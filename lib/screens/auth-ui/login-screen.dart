@@ -125,7 +125,7 @@ class _LoginFormState extends State<LoginForm> {
               );
             } else {
               Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => SelectService()),
+                MaterialPageRoute(builder: (context) => HomeScreen()),
               );
               Fluttertoast.showToast(
                 msg: "Welcome User",

@@ -3,12 +3,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shopping_app/controller/cart-controller.dart';
+import 'package:shopping_app/screens/user/select-service.dart';
 import 'package:shopping_app/utils/AppConstant.dart';
 
 import '../screens/user/checkout-screen.dart';
 import '../screens/user/home-screen.dart';
 
 class CartScreen extends StatefulWidget {
+  bool selectService = false;
+  CartScreen({Key? key , required }) : super(key: key);
   @override
   _CartScreenState createState() => _CartScreenState();
 }
@@ -115,7 +118,7 @@ class _CartScreenState extends State<CartScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => CheckoutScreen()));
+                              builder: (context) => SelectService()));
                     },
                     child: const Text('Place Order'),
                   ),

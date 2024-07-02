@@ -190,7 +190,7 @@ class LoginForm extends StatelessWidget {
                     showToast(context, "Login $whoLoggedIn Successful");
 
                     Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => SelectService()));
+                        MaterialPageRoute(builder: (context) => HomeScreen()));
 
                         
                     return; // Return here to prevent showing unnecessary toasts or snackbar

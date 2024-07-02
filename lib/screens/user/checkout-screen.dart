@@ -13,10 +13,14 @@ import 'package:shopping_app/controller/payment-controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shopping_app/screens/user/home-screen.dart';
 import 'package:shopping_app/utils/AppConstant.dart';
+import 'package:shopping_app/utils/global-variables.dart';
 
 import '../../controller/get-customer-device-token-controller.dart';
 
 class CheckoutScreen extends StatefulWidget {
+  bool? selectService;
+  CheckoutScreen({this.selectService});
+
   @override
   _CheckoutScreenState createState() => _CheckoutScreenState();
 }
@@ -46,9 +50,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   TextEditingController phoneController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+  GloablVariableDeclaration globalVariableDeclaration = GloablVariableDeclaration();
   String selectedPaymentMethod = 'Card';
 
   bool isPaymentCompleted = false;
+  bool? service;
+
+  void recieve(bool value) {
+    print("recieved valude is $value");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +74,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           IconButton(
             icon: Icon(Icons.refresh),
             onPressed: () {
+              print("recieved valu is ${widget.selectService}");
+              // globalVariableDeclaration.setSelectService(widget.selectService!);
               fetchAddressData();
             },
           ),
@@ -111,6 +123,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               ),
             ),
             SizedBox(height: 20),
+            if(widget.selectService != null && widget.selectService!)
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Container(

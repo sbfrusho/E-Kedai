@@ -23,7 +23,7 @@ class SingleProductView extends StatelessWidget {
   final CheckoutScreen checkoutScreen = CheckoutScreen();
   User? user = FirebaseAuth.instance.currentUser;
   SingleProductView(
-      {Key? key, required this.categoryId, required this.categoryName})
+      {Key? key, required this.categoryId, required this.categoryName , })
       : super(key: key);
 
   @override
