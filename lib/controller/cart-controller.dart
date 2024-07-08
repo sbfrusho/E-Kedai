@@ -68,11 +68,6 @@ class CartController extends GetxController {
       }
       clearCart();
       Fluttertoast.showToast(msg: "Order complete");
-      
-
-      // Clear the cart after placing order
-      
-
       // You can show a success message here
     } catch (error) {
       // Handle any errors
