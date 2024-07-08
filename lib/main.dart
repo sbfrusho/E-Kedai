@@ -16,7 +16,7 @@ import 'screens/user/home-screen.dart';
 
 void main() async {
   Stripe.publishableKey =
-      "pk_test_51PGXvy06xtEbkBYxUkFo4Sdng5zZTx4tcKZynJcUyAreSpphCrtXk8wOC54TXKTYMT4R6oVVcYpf0EZUEw1wTXZq00122GrocM";
+      "pk_test_51PZzBSRxy4NUQGVz9smOMESNyVGHVadfmnksCbt9l0Ra9vPYKc1Qbp7XZBz1tFstUJDbHnphwnnx2dtzLNeQGszo00v85UGaJD";
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

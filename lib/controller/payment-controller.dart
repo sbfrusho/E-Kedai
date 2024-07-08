@@ -75,7 +75,7 @@ class PaymentController extends GetxController {
         'setup_future_usage': 'off_session' // This line tells Stripe to save the card for future use
       };
 
-      var secretKey = "sk_test_51PGXvy06xtEbkBYxTTHTZWSoJDHDj9d8EH6ru6dqmVBpLCrNUohWeMsPZw31SPN3EbdL1rBRH4JGbGhGKZfZbmeL00HI8Zv3T2";
+      var secretKey = "sk_test_51PZzBSRxy4NUQGVzwNLgLDBz4qtdJLE0l3ccTzCJMiKZnyMXJZ0UcodNRg1QwmZOVB9EbNhC8d0nmyBUAAhB0zBq004kwEYJQT";
       var response = await http.post(
         Uri.parse('https://api.stripe.com/v1/payment_intents'),
         headers: {
@@ -101,7 +101,7 @@ class PaymentController extends GetxController {
     // In a real application, you should store and retrieve the customer ID
 
     try {
-      var secretKey = "sk_test_51PGXvy06xtEbkBYxTTHTZWSoJDHDj9d8EH6ru6dqmVBpLCrNUohWeMsPZw31SPN3EbdL1rBRH4JGbGhGKZfZbmeL00HI8Zv3T2";
+      var secretKey = "sk_test_51PZzBSRxy4NUQGVzwNLgLDBz4qtdJLE0l3ccTzCJMiKZnyMXJZ0UcodNRg1QwmZOVB9EbNhC8d0nmyBUAAhB0zBq004kwEYJQT";
       var response = await http.post(
         Uri.parse('https://api.stripe.com/v1/customers'),
         headers: {
